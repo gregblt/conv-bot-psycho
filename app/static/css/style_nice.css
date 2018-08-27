@@ -331,6 +331,7 @@ min-height:0;
 	color: black;
 	width: auto;
     max-width: 80%;
+    box-shadow: 5px 5px 2px 1px rgba(0, 0, 255, .2);
 	background: rgb(229, 229, 234);
 	border-radius: 0px 20px 20px 20px;
 }
@@ -338,6 +339,7 @@ min-height:0;
 	color: white;
 	max-width: 80%;
 	width: auto;
+	box-shadow: 5px 5px 2px 1px rgba(0, 0, 255, .2);
 	margin: 5px 0 5px auto;
 	border-radius: 20px 20px 0px 20px;
 	background: rgb(64, 172, 246);

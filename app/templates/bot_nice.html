@@ -209,7 +209,7 @@
                     $("#checkbox").fadeOut(500).remove(); 
                     $("#chatlogs").append($('<div class="chat self"><p class="chat-message">'+msg+'</p></div>').hide().fadeIn(500, function() {
                             $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
-                            $("#chatlogs").append($("<div id='wave' class='chat friend'><div class='friend-photo'><img src='../static/img/matilda.png' style='float:left;height:40px; width:40px;'></div><p class='chat-message'><span class='jumping-dots'><span class='dot-1'>o </span><span class='dot-2'>o </span><span class='dot-3'>o </span></span></p></div>").hide().fadeIn(500, function () {
+                            $("#chatlogs").append($("<div id='wave' class='chat friend'><div class='friend-photo'><img src='../static/img/sq33.png' style='float:left;height:40px; width:40px;'></div><p class='chat-message'><span class='jumping-dots'><span class='dot-1'>o </span><span class='dot-2'>o </span><span class='dot-3'>o </span></span></p></div>").hide().fadeIn(500, function () {
                                 $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
 
 
@@ -220,7 +220,7 @@
                     console.log($('#wave'))
             }
             function errorMessage() {
-                chat=$("<div class='friend-photo'><img src='../static/img/matilda.png' style='float:left;height:40px; width:40px;'></div><div class='chat friend'><p class='chat-message'>I am sorry I am not able to help you with this right now</p></div>")
+                chat=$("<div class='friend-photo'><img src='../static/img/sq33.png' style='float:left;height:40px; width:40px;'></div><div class='chat friend'><p class='chat-message'>I am sorry I am not able to help you with this right now</p></div>")
                 if($("div#wave").length>0) {
                     $(document).find("div#wave").fadeOut(500, function() {
                         console.log("hello")
