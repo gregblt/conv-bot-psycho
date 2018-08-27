@@ -1,0 +1,88 @@
+{% extends 'bot_nice.html' %}
+{% block chat %}
+
+<div class="headerBar" >
+<div style="display: flex;flex-flow: row wrap;align-items:flex-start;">
+	<div class="user-photo"><img src="../static/img/matilda.png" style='float:left;'></div>
+	<p class="title" style='float:left;'>Bernard</p>
+</div>
+
+
+
+</div>
+
+
+
+
+<div class="chat-body">
+<div class="chatbox">
+<div class="chatlogs" id="chatlogs">           
+{% for elem in chat %}
+<div class="chat friend">
+<div class="friend-photo"><img src="../static/img/matilda.png" style='float:left;height:40px; width:40px;'></div>
+<p class="chat-message">{{ elem }}</p>
+</div>
+{% endfor %}
+{% if cards %}
+<div class="chat friend">
+	<div  id="carouselExampleControls" class="carousel slide" data-interval="false" data-ride="carousel">
+	  <div class=chat-card>
+		  <div class="carousel-inner" >
+		  	{% for elem in cards %}
+		  	{% if loop.index == 1 %}
+		    <div class="carousel-item active">
+		    {% else %}
+		    <div class="carousel-item">
+		    {% endif %}
+		      <img class="chat-img" class="d-block w-100" src={{ elem.img }} alt="First slide">
+		      <p class="card-title" >{{ elem.title }}</p>
+		      <p class="card-subtitle">{{ elem.subtitle }}</p>
+		      <a href={{ elem.link }}>View more</a>
+		    </div>
+		    {% endfor %}
+		  </div>
+	 </div>
+	  <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+	    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+	    <span class="sr-only">Previous</span>
+	  </a>
+	  <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+	    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+	    <span class="sr-only">Next</span>
+	  </a>  
+	</div>
+</div>
+{% endif %}
+</div>            
+</div>
+{% if quickReplies %}
+<div class="chat-buttons" id="quick-replies">
+    {% for elem in quickReplies %}
+    <button class="quick-reply" value={{ elem.payload }} type="button">{{ elem.title }}</button> 
+    {% endfor %}
+</div>
+{% endif %}
+{% if checkbox %}
+<div >
+    <div  class="chat-checkboxes" >
+    
+    {% for elem in checkbox %}
+    <label class="checkbox-inline">
+      <input class="checkbox-input" type="checkbox" value={{ elem.value }}>{{ elem.txt }}
+    </label>
+    {% endfor %}
+
+  </div>
+    <div class="chat-checkboxes-send">
+    <button class="btn-checkboxes-send" value="done" type="button">Send</button>
+    </div>
+</div>
+{% endif %}
+
+</div>
+
+
+
+
+
+{% endblock %}

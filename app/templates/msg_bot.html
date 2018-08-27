@@ -1,0 +1,173 @@
+{% for elem in chat %}
+<div class="chat friend">
+<p class="chat-message">{{ elem }}</p>
+</div>
+{% endfor %}
+
+{% if cards %}
+<div id="wrap-{{ cards_id }}" class="card-container" style="padding-top: 10px;padding-bottom: 10px; display: none">
+<div  id="{{ cards_id }}" class="carousel slide" data-interval="false" data-ride="carousel">
+	  <div class="carousel-inner" >
+	  	{% for elem in cards %}
+	  	{% if loop.index == 1 %}
+	    <div class="item active">
+	    {% else %}
+	    <div class="item">
+	    {% endif %}
+	    <div class="card-border" style="justify-content: center; display:flex; flex-direction: column;">
+	      <img class="img-car" src={{ elem.img }} alt="slide">
+	      <p class="card-title" >{{ elem.title }}</p>
+	      <p class="card-subtitle">{{ elem.subtitle }}</p>
+	      <p class="card-link" style="text-align:center;"><a target="_blank" href={{ elem.link }}>{{ elem.text_link }}</a></p>
+	    </div>
+	    </div>
+	    {% endfor %}
+</div>
+  <!-- Left and right controls -->
+  <a class="left carousel-control" href="#{{ cards_id }}" role="button" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="right carousel-control" href="#{{ cards_id }}" role="button" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
+</div>
+{% endif %}
+
+{% if dropdown != None %}
+<div class="dropdown-container">
+  <div>
+      <button id="dropdown-title" class="dropdown-title dropdown-trips">Trips</button>
+      <div id="dropdown-1" class="dropdown" style="background-image: linear-gradient(to bottom, #ff4d4d, transparent); padding-top: 3px;padding-bottom: 10px; display: none">
+        <div id="myCarousel-1" class="carousel slide" data-interval="false">
+
+
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner" >
+    {% for elem in dropdown.items_trips %}
+  {% if loop.index == 1 %}
+    <div class="item active">
+    {% else %}
+    <div class="item">
+    {% endif %}
+      <div class="card-border" style="justify-content: center;">
+        <img class="img-car" src={{ elem.img }}  >
+        <div class="card-title">{{ elem.title }}</div>
+        <div class="card-subtitle" >{{ elem.subtitle }}</div>
+        <a  class="card-link" style="text-align:center" href={{ elem.link }}>{{ elem.link_txt }}</a>
+    </div>
+
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Left and right controls -->
+  <a class="left carousel-control" href="#myCarousel-1" role="button" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="right carousel-control" href="#myCarousel-1" role="button" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
+
+<div class="chat-buttons" id="event-categories">
+<div id="checkbox">
+    <div  class="filter-checkboxes" >
+    
+    {% for elem in dropdown.filters %}
+    <label class="filter-container" {% if elem.checked %} style="background-color:rgb(64, 172, 246);"{% endif %}>
+      <input class="checkbox-input" type="checkbox" value={{ elem.value }} {% if elem.checked %} checked {% endif %}>{{ elem.txt }}
+      <span class="checkmark"></span>
+    </label>
+    {% endfor %}
+
+
+  </div>
+    <div class="filter-checkboxes-send">
+    {% for elem in dropdown.buttons_trips %}
+    <button class="btn-filter-send" value={{ elem.value }} type="button" >{{ elem.txt }}</button>
+    {% endfor %}
+    </div>
+</div>
+
+</div>
+      </div>
+      <button id="dropdown-title" class="dropdown-title dropdown-events">Events</button>
+      <div id="dropdown-2" class="dropdown" style="background-image: linear-gradient(to bottom, #5398DB, transparent); padding-top: 3px;padding-bottom: 10px; display: none">
+        <div id="myCarousel-2" class="carousel slide" data-interval="false">
+
+
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner" >
+    {% for elem in dropdown.items_events %}
+  {% if loop.index == 1 %}
+    <div class="item active">
+    {% else %}
+    <div class="item">
+    {% endif %}
+      <div class="card-border" style="justify-content: center;">
+        <img class="img-car" src={{ elem.img }}  >
+        <div class="card-title">{{ elem.title }}</div>
+        <div class="card-subtitle" >{{ elem.subtitle }}</div>
+        <a  class="card-link" style="text-align:center" href={{ elem.link }}>{{ elem.link_txt }}</a>
+    </div>
+
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Left and right controls -->
+  <a class="left carousel-control" href="#myCarousel-2" role="button" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="right carousel-control" href="#myCarousel-2" role="button" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
+<div class="chat-buttons" id="event-categories">
+
+    {% for elem in dropdown.buttons_events %}
+    <button class="event-categories" value={{ elem.id }} type="button">{{ elem.txt }}</button> 
+    {% endfor %}
+
+</div>
+      </div>
+  </div>
+</div>
+{% endif %}
+
+
+{% if quickReplies %}
+<div class="chat-buttons" id="quick-replies">
+    {% for elem in quickReplies %}
+    <button class="quick-reply" value={{ elem.payload }} type="button">{{ elem.title }}</button> 
+    {% endfor %}
+</div>
+{% endif %}
+
+
+
+{% if checkbox %}
+<div id="checkbox">
+    <div  class="chat-checkboxes" >
+    
+    {% for elem in checkbox %}
+    <label class="checkbox-container">
+      <input class="checkbox-input" type="checkbox" value={{ elem.value }}>{{ elem.txt }}
+      <span class="checkmark"></span>
+    </label>
+    {% endfor %}
+
+  </div>
+    <div class="chat-checkboxes-send">
+    <button class="btn-checkboxes-send" value="done" type="button">Send</button>
+    </div>
+</div>
+{% endif %}
+
