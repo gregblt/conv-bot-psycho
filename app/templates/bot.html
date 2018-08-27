@@ -16,21 +16,13 @@
     </head>
 
     <body>
-        <div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = 'https://connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v3.0&appId=170159587033924&autoLogAppEvents=1';
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
 
         <script type="text/javascript">
         $(function() {
             for(i = 0; i < $("#chatlogs").children().length; i++)  {
-                $($("#chatlogs").children()[i]).hide().fadeIn(500).delay(400)
+                $($("#chatlogs").children()[i]).hide().fadeIn(0).delay(0)
                 if(i<$("#chatlogs").children().length-1) {
-                     $($("#chatlogs").children()[i+1]).delay(400)
+                     $($("#chatlogs").children()[i+1]).delay(0)
                 }
             }
 
@@ -143,10 +135,10 @@
             {
                console.log($(this)[0].value);
                msg=$(this)[0].value
-				$("#wave").fadeOut(500).remove();
-            	$("#quick-replies").fadeOut(500).remove(); 
-                $("#checkbox").fadeOut(500).remove(); 
-                $("#chatlogs").append($('<div class="chat self"><p class="chat-message">'+msg+'</p></div>').hide().fadeIn(500, function() {
+				$("#wave").fadeOut(0).remove();
+            	$("#quick-replies").fadeOut(0).remove(); 
+                $("#checkbox").fadeOut(0).remove(); 
+                $("#chatlogs").append($('<div class="chat self"><p class="chat-message">'+msg+'</p></div>').hide().fadeIn(0, function() {
                 		$('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
 
                 })) 
@@ -202,12 +194,12 @@
 
             function addMessage(msg) {
                 	// Add new text on self side
-                	$("#wave").fadeOut(500).remove();
-                	$("#quick-replies").fadeOut(500).remove(); 
-                    $("#checkbox").fadeOut(500).remove(); 
-                    $("#chatlogs").append($('<div class="chat self"><p class="chat-message">'+msg+'</p></div>').hide().fadeIn(500, function() {
+                	$("#wave").remove();
+                	$("#quick-replies").remove(); 
+                    $("#checkbox").remove(); 
+                    $("#chatlogs").append($('<div class="chat self"><p class="chat-message">'+msg+'</p></div>', function() {
                     		$('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
-                    	    $("#chatlogs").append($('<div id="wave" class="chat friend"><p class="chat-message"><span class="jumping-dots"><span class="dot-1">o </span><span class="dot-2">o </span><span class="dot-3">o </span></span></p></div>').hide().fadeIn(500, function () {
+                    	    $("#chatlogs").append($('<div id="wave" class="chat friend"><p class="chat-message"><span class="jumping-dots"><span class="dot-1">o </span><span class="dot-2">o </span><span class="dot-3">o </span></span></p></div>').show( function () {
                     	    	$('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
 
 
@@ -220,10 +212,10 @@
             function errorMessage() {
                 chat=$("<div class='chat friend'><p class='chat-message'>I am sorry I am not able to help you with this right now</p></div>")
                 if($("div#wave").length>0) {
-                    $(document).find("div#wave").fadeOut(500, function() {
+                    $(document).find("div#wave").fadeOut(0, function() {
                         console.log("hello")
                         $("#wave").remove();
-                        $("#chatlogs").append(chat.hide().fadeIn(500, function(){
+                        $("#chatlogs").append(chat.hide().fadeIn(0, function(){
                             $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
                         }))
                         
@@ -231,7 +223,7 @@
                 }  
                 else{
                     $("#wave").remove();
-                    $("#chatlogs").append(chat.hide().fadeIn(500, function(){
+                    $("#chatlogs").append(chat.hide().fadeIn(0, function(){
                         $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
                     }))
                 }
@@ -247,27 +239,27 @@
                 console.log($(document).find("div#wave.chat.friend"))
                 console.log($('*'))
                 if($("div#wave").length>0) {
-	                $(document).find("div#wave").fadeOut(500, function() {
+	                $(document).find("div#wave").remove(function() {
 	                	console.log("hello")
 	                	$("#wave").remove();
-	                    $("#chatlogs").append(chat.hide().fadeIn(500, function(){
+	                    $("#chatlogs").append(chat.show( function(){
 	                    	if(quick.length>0) {
-	                    		$(".chatbox").after(quick.hide().slideDown(500, function () {
+	                    		$(".chatbox").after(quick.hide().slideDown(0, function () {
 	                    			$('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
 	                    		}))
 	                    	}
 	                    	if(check.length>0) {
-	                    		$(".chatbox").after(check.hide().slideDown(500, function () {
+	                    		$(".chatbox").after(check.hide().slideDown(0, function () {
 	                    			$('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
 	                    		}))
 	                    	}
 		                	if(card.length>0) {
-	                    		$(".chatlogs").append(card.hide().fadeIn(500, function () {
+	                    		$(".chatlogs").append(card.hide().fadeIn(0, function () {
 	                    			$('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
 	                    		}))
 	                    	}
                             if(dropdown.length>0) {
-                                $(".chatlogs").append(dropdown.hide().fadeIn(500, function () {
+                                $(".chatlogs").append(dropdown.hide().fadeIn(0, function () {
                                     $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
                                 }))
                             }
@@ -278,24 +270,24 @@
 	            }  
 	            else{
 	        		$("#wave").remove();
-	                $("#chatlogs").append(chat.hide().fadeIn(500, function(){
+	                $("#chatlogs").append(chat.show(function(){
 	                	if(quick.length>0) {
-	                		$(".chatbox").after(quick.hide().slideDown(500, function () {
+	                		$(".chatbox").after(quick.hide().slideDown(0, function () {
 	                			$('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
 	                		}))
 	                	}
 	                	if(check.length>0) {
-	                		$(".chatbox").after(check.hide().slideDown(500, function () {
+	                		$(".chatbox").after(check.hide().slideDown(0, function () {
 	                			$('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
 	                		}))
 	                	}	                    	
 	                	if(card.length>0) {
-                    		$(".chatlogs").append(card.hide().fadeIn(500, function () {
+                    		$(".chatlogs").append(card.hide().fadeIn(0, function () {
                     			$('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
                     		}))
                     	}
                         if(dropdown.length>0) {
-                            $(".chatlogs").append(dropdown.hide().fadeIn(500, function () {
+                            $(".chatlogs").append(dropdown.hide().fadeIn(0, function () {
                                 $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
                             }))
                         }

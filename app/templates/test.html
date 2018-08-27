@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+</script>
+<script> 
+$(document).ready(function(){
+  $("button").click(function(){
+
+var $marginLefty =    $("#content"); // your selector here
+
+$marginLefty.animate({
+     height:'toggle',width:'toggle',
+      marginLeft: parseInt($marginLefty.css('marginLeft'),10) == 0 ?
+        $marginLefty.outerWidth() :
+        0
+    });
+  });
+});
+</script> 
+</head>
+
+<body>
+<button>Start Animation</button>
+
+<div id="content" style="background:#98bf21;height:100px;width:100px;position:absolute;">
+</div>
+</body>
+</html>

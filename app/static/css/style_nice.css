@@ -342,7 +342,6 @@ min-height:0;
 	box-shadow: 5px 5px 2px 1px rgba(0, 0, 255, .2);
 	margin: 5px 0 5px auto;
 	border-radius: 20px 20px 0px 20px;
-	background: rgb(64, 172, 246);
 	overflow-wrap: break-word;
 }
 .friend .chat-img {
@@ -656,20 +655,21 @@ margin-left:auto;
 
 
 .quick-reply {
-	-webkit-border-radius: 19;
-	-moz-border-radius: 19;
-	border-radius: 18px;
+	-webkit-border-radius: 6;
+	-moz-border-radius: 6;
+	border-radius: 6px;
 	color: #000000;
-	font-size: 36px;
-	background: #ffffff;
+	font-size: 42px;
+	background: darkgrey;
 	padding: 8px;
-	border: solid black 2px;
+	border: solid grey 2px;
 	text-decoration: none;
 	margin: 13px 5px 15px 5px;
+	transition: 0.3s;
 
 }
 .quick-reply:hover {
-	background: grey;
+	background: lightgrey;
 	text-decoration: none;
 }
 
@@ -877,7 +877,7 @@ margin-left:auto;
 		width: auto;
 		margin: 5px 0 5px auto;
 		border-radius: 20px 20px 0px 20px;
-		background: rgb(64, 172, 246);
+		background: purple;
 		overflow-wrap: break-word;
 	}
 	.friend .chat-img {
@@ -1022,7 +1022,7 @@ margin-left:auto;
 
  .quick-reply {
 
-	font-size: 16px;
+	font-size: 20px;
 
 }
 
