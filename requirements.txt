@@ -1,0 +1,8 @@
+Flask==0.12.2
+Jinja2==2.9.6
+gunicorn
+flask_cors
+flask_httpauth
+pytz
+requests
+apscheduler
