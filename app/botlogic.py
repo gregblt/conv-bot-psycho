@@ -6,9 +6,6 @@ Created on Mon Sep  3 10:02:20 2018
 @author: gregory
 """
 
-from wit import Wit
-import requests
-
 from recastai import Request, Connect
 
 request = Request('fe8f59c463abfca58a5bddf1ccacb0b7')

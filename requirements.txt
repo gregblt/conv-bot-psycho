@@ -6,3 +6,4 @@ flask_httpauth
 pytz
 requests
 apscheduler
+recastai
