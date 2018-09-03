@@ -7,17 +7,19 @@ Created on Sat May 12 08:36:39 2018
 """
 
 
-from flask import render_template, make_response
-import random
-from flask import Flask, request
-import requests
+from flask import Flask, request, render_template, make_response
+from flask_sqlalchemy import SQLAlchemy
 import json
 import uuid
-from random import randint
-import sys
 from app.botlogic import BotLogic
 
 app = Flask(__name__)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://dgslhenqaydtqj:72133439322c29aa8b3016d9b170be82cd7a0d89f09b2696c7e001ec5b1cf340@ec2-107-21-98-165.compute-1.amazonaws.com:5432/d8p00huj4sr3f1'
+
+db = SQLAlchemy(app)
+
+from app.models import User
 
 db2=[]
 
@@ -27,7 +29,17 @@ db2=[]
 
 dbfb=[]
 
-#We will receive messages that Facebook sends our bot at this endpoint 
+@app.route('/add/')
+def webhook():
+    name = "ram"
+    email = "ram@ram.com"
+    u = User(id = 1, nickname = name, email = email)
+    print("user created", u)
+    db.session.add(u)
+    db.session.commit()
+    return "user created"
+
+ #We will receive messages that Facebook sends our bot at this endpoint 
 @app.route("/jacques", methods=['GET', 'POST'])
 def receive_message():
 
@@ -107,6 +119,3 @@ def receive_message_ugly():
     if request.method == 'POST':
         return "not implemented"
         
-
-if __name__ == "__main__":
-    app.run()
