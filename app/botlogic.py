@@ -11,8 +11,6 @@ from recastai import Request, Connect
 request = Request('fe8f59c463abfca58a5bddf1ccacb0b7')
 res = request.analyse_text('abdul')
 
-WIT_ACCESS_TOKEN="PSSUTXYCMNTIA6KWKIXT36PUXUFN2SJA"
-
 class BotLogic:
         
     STEP_INIT=0
@@ -29,8 +27,7 @@ class BotLogic:
                 self.current_step=current['current_step']
             if 'user_name' in current:
                 self.user_name=current['user_name']
-            
-        self.client = Wit(WIT_ACCESS_TOKEN)
+        
         
     def get_next_answer(self,message=''):
         
