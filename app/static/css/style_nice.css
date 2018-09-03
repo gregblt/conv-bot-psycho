@@ -195,7 +195,7 @@ body {
     padding:0;
 	min-height: 100%;
 	background: #833ab4;  /* fallback for old browsers */
-	background-image: linear-gradient(120deg, #a6c0fe 0%, #f68084 100%);
+	background-image: linear-gradient(to right bottom, #c5dcff, #9ecbed, #75bad7, #4caabc, #21989d);
     background-repeat: no-repeat;
     background-attachment: fixed;
     min-height:100%;
@@ -342,6 +342,7 @@ min-height:0;
 	box-shadow: 5px 5px 2px 1px rgba(0, 0, 255, .2);
 	margin: 5px 0 5px auto;
 	border-radius: 20px 20px 0px 20px;
+	background:  #217d9d;
 	overflow-wrap: break-word;
 }
 .friend .chat-img {
@@ -877,7 +878,6 @@ margin-left:auto;
 		width: auto;
 		margin: 5px 0 5px auto;
 		border-radius: 20px 20px 0px 20px;
-		background: purple;
 		overflow-wrap: break-word;
 	}
 	.friend .chat-img {

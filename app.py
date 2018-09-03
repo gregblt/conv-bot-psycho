@@ -15,7 +15,6 @@ import json
 import uuid
 from random import randint
 import sys
-from app.botlogic import BotLogic
 
 app = Flask(__name__)
 
@@ -35,7 +34,8 @@ def receive_message():
     if request.method == 'GET':
         userId=str(uuid.uuid4());
         resp = make_response(render_template('chat.html',
-                                             chat=["Hi there  👋🏻 ! What is your name?"]
+                                             chat=["Hi there."],quickReplies=[{'title':"Good",'payload':"good"}
+                                             ,{'payload':'bad','title':"I have been better"}]
 
                                              
                                 )    
@@ -47,23 +47,7 @@ def receive_message():
         return resp
     if request.method == 'POST':
     	return "not implemented"
-    
-@app.route("/api/v1/message",  methods=['POST'])
-def post_message():
-        
-        # Get arguments
-        data=json.loads(request.data)
-        
-        # Get next answer
-        bot=BotLogic(current={'current_step':BotLogic.STEP_GET_NAME})
-        ans=bot.get_next_answer(message=data['text'])
-        chat=[]
-        for value in ans:
-            if 'text' in value:
-                chat.append(value['text'])
-        resp = make_response(render_template('msg_bot_nice.html',
-                                         chat=chat))        
-        return resp
+
 #We will receive messages that Facebook sends our bot at this endpoint 
 @app.route("/bernard", methods=['GET', 'POST'])
 def receive_message_nice():
@@ -72,7 +56,8 @@ def receive_message_nice():
     if request.method == 'GET':
         userId=str(uuid.uuid4());
         resp = make_response(render_template('chat_nice.html',
-                                             chat=["Hi there 👋! What is your name?"]
+                                             chat=["Hi there."],quickReplies=[{'title':"Good",'payload':"good"}
+                                             ,{'payload':'bad','title':"I have been better"}]
 
                                              
                                 )    
@@ -83,7 +68,7 @@ def receive_message_nice():
                         
         return resp
     if request.method == 'POST':
-    	return "not implemented"
+        return "not implemented"
 
 #We will receive messages that Facebook sends our bot at this endpoint 
 @app.route("/robert", methods=['GET', 'POST'])
