@@ -10,13 +10,13 @@ Created on Sat May 12 08:36:39 2018
 from flask import Flask, request, render_template, make_response
 from flask_sqlalchemy import SQLAlchemy
 import json
+import os
 import uuid
 from app.botlogic import BotLogic
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://dgslhenqaydtqj:72133439322c29aa8b3016d9b170be82cd7a0d89f09b2696c7e001ec5b1cf340@ec2-107-21-98-165.compute-1.amazonaws.com:5432/d8p00huj4sr3f1'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../app.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 
 db = SQLAlchemy(app)
 
@@ -70,8 +70,9 @@ def post_message():
         for value in ans:
             if 'text' in value:
                 chat.append(value['text'])
+                print(value['text'])
         resp = make_response(render_template('msg_bot_nice.html',
-                                         chat=chat))    
+                                         chat=chat))
         # Update db
         current = bot.get_attributes()
         conversation.current=json.dumps(current)
