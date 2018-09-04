@@ -1,6 +1,6 @@
-!.env
-!/migrations
-!/__pychache__
-!/app/__pycache__
-!app.db
+.env
+/migrations
+/__pychache__
+/app/__pycache__
+app.db
 
