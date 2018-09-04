@@ -1,6 +1,8 @@
-.env
-migrations/
 __pychache__/
+migrations/
+*.pyc
+*.pyo
 app/__pycache__/
 app.db
+.env
 
