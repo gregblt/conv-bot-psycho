@@ -238,12 +238,11 @@ class BotLogic:
             answer = [{'text': """Welcome back {}! How was your day?""".format(self.user_name)}] 
             
         elif self.current_step == self.STEP_NEGATIVE:  
-            self.current_step = self.get_negative_mood_answer(message=message)
+            answer = self.get_negative_mood_answer(message=message)
             
         elif self.current_step == self.STEP_ASK_HEAR_MORE:
-            self.current_step = self.get_step_ask_hear_more_answer(message=message)
-            
-            
+            answer = self.get_step_ask_hear_more_answer(message=message)
+                       
         else:
             answer = [{'text': """It looks like I am getting tired, 
                        I do not know what to say... 😓"""}]
