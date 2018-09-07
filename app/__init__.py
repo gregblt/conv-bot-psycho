@@ -67,12 +67,15 @@ def post_message():
         bot=BotLogic(current=json.loads(conversation.current))
         ans=bot.get_next_answer(message=data['text'])
         chat=[]
+        img=[]
         for value in ans:
             if 'text' in value:
                 chat.append(value['text'])
                 print(value['text'])
+            if 'img' in value:
+                img.append(value['img'])
         resp = make_response(render_template('msg_bot_nice.html',
-                                         chat=chat))
+                                         chat=chat,img=img))
         # Update db
         current = bot.get_attributes()
         conversation.current=json.dumps(current)

@@ -5,6 +5,15 @@
 </div>
 {% endfor %}
 
+{% for elem in img %}
+<div class="chat friend">
+<div class='friend-photo'><img src='../static/img/sq33.png' style='float:left;height:40px; width:40px;'></div>
+<p class="chat-message">
+	<img src="{{ elem }}">
+</p>
+</div>
+{% endfor %}
+
 {% if cards %}
 <div id="wrap-{{ cards_id }}" class="card-container" style="padding-top: 10px;padding-bottom: 10px; display: none">
 <div  id="{{ cards_id }}" class="carousel slide" data-interval="false" data-ride="carousel">
