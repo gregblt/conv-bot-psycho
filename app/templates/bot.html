@@ -17,85 +17,32 @@
 
     <body>
 
-        <script type="text/javascript">
+       <script type="text/javascript">
         $(function() {
+
+
             for(i = 0; i < $("#chatlogs").children().length; i++)  {
-                $($("#chatlogs").children()[i]).hide().fadeIn(0).delay(0)
+                $($("#chatlogs").children()[i]).hide().fadeIn(500).delay(400)
                 if(i<$("#chatlogs").children().length-1) {
-                     $($("#chatlogs").children()[i+1]).delay(0)
+                     $($("#chatlogs").children()[i+1]).delay(400)
                 }
             }
 
-            $(document).on('click','.btn-filter-send', function() {
-            	console.log(this.value)
-            	if(this.value=='done')  {
-	            	dropdown=$(this).parent().parent().parent().parent()
-	            	title=$(dropdown).parent().find('#dropdown-title')
-	            	$(dropdown).html('<div id="spinner" style="background: transparent;"><div class="loader"></div></div>')
-	            	array=$(this).parent().parent().find(".checkbox-input")
-		               console.log(array)
-		               obj={}
-		               for (var i in array) {
-		                  //console.log(array[i].is(":checked"));
-		                  if(i<array.length) {
-		                  obj[$(array[i]).val()]=$(array[i]).is(':checked')
-						}
-		               }
-		               console.log(obj)
-	               $.ajax({
-	                        url: '/get_trips?parameters='+encodeURIComponent(JSON.stringify({'checkbox':{'payload':obj}})),
-	                        type: 'GET',
-	                        contentType: 'application/json; charset=utf-8',
-	                        dataType: 'html',
-	                        success: function(response) {
-								$(dropdown).html(response)
-								$('.chatlogs').animate({scrollTop:$('.chatlogs').scrollTop() + ($(title).offset().top - $('.chatlogs').offset().top)});
-	                        }
-	                    }); 
-	            }
-	            else if(this.value=='clear') {
-	            	console.log($(this).parent().parent())
-	            	inputs=$(this).parent().parent().find(".checkbox-input:checked")
-	            	$(inputs).each(function() {
-	            		$(this).parent().css('background-color', '#ffffff');
-	            		$(this).prop('checked', false); // Unchecks it
-	            	})
-	            	console.log(inputs)
-	            }
-            });
 
 
-            $(document).on('click','.event-categories', function() {
-            	console.log(this.value)
-
-	            	dropdown=$(this).parent().parent()
-	            	title=$(dropdown).parent().find('#dropdown-title')
-	            	$(dropdown).html('<div id="spinner" style="background: transparent;"><div class="loader"></div></div>')
-
-	            	$.ajax({
-	                        url: '/get_events?cat_id='+this.value,
-	                        type: 'GET',
-	                        contentType: 'application/json; charset=utf-8',
-	                        dataType: 'html',
-	                        success: function(response) {
-								$(dropdown).html(response)
-								$('.chatlogs').animate({scrollTop:$('.chatlogs').scrollTop() + ($(title).offset().top - $('.chatlogs').offset().top)});
-	                        }
-	                }); 
-
-            });
 
             $(document).on('click','.checkbox-input', function() {
 
-			  if ($(this).is(':checked')) {
-			    $(this).parent().css('background-color', 'rgb(64, 172, 246)');
-				console.log("clickeds")
-			  }
-			  else {
-			    $(this).parent().css('background-color', '#ffffff');
-				console.log("UNclickeds")
-			}
-			});
+              if ($(this).is(':checked')) {
+                $(this).parent().css('background-color', 'rgb(64, 172, 246)');
+                console.log("clickeds")
+              }
+              else {
+                $(this).parent().css('background-color', '#ffffff');
+                console.log("UNclickeds")
+            }
+            });
+
 
             $(document).on('click',"button.btn-checkboxes-send", function()
             {
@@ -111,19 +58,19 @@
                   //console.log(array[i].is(":checked"));
                   if(i<array.length) {
                   obj[$(array[i]).val()]=$(array[i]).is(':checked')
-				}
+                }
                }
                $(this).parent().parent()
- 				
+                
                
                $.ajax({
-                        url: '/',
+                        url: '/api/v1/message',
                         type: 'POST',
                         data: JSON.stringify({'checkbox':{'payload':obj}}),
                         contentType: 'application/json; charset=utf-8',
                         dataType: 'html',
                         success: function(response) {
-							addAnswer(response)
+                            addAnswer(response)
                         },
                         error: function() {
                             errorMessage()
@@ -135,26 +82,37 @@
             {
                console.log($(this)[0].value);
                msg=$(this)[0].value
-				$("#wave").fadeOut(0).remove();
-            	$("#quick-replies").fadeOut(0).remove(); 
-                $("#checkbox").fadeOut(0).remove(); 
-                $("#chatlogs").append($('<div class="chat self"><p class="chat-message">'+msg+'</p></div>').hide().fadeIn(0, function() {
-                		$('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
+                $("#wave").fadeOut(500).remove();
+                $("#quick-replies").fadeOut(500).remove(); 
+                $("#checkbox").fadeOut(500).remove(); 
+                $("#chatlogs").append($('<div class="chat self"><p class="chat-message">'+msg+'</p></div>').hide().fadeIn(500, function() {
+                        $("#chatlogs").append($("<div id='wave' class='chat friend'><p class='chat-message'><span class='jumping-dots'><span class='dot-1'>o </span><span class='dot-2'>o </span><span class='dot-3'>o </span></span></p></div>").hide().fadeIn(500, function() {
+                        $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
+                    }))
 
-                })) 
+                }))
 
                $.ajax({
-                        url: '/',
+                        url: '/api/v1/message',
                         type: 'POST',
                         data: JSON.stringify({'quick_reply':{'payload':msg}}),
                         contentType: 'application/json; charset=utf-8',
                         dataType: 'html',
                         success: function(response) {
-							addAnswer(response)
-							$("#wave").remove();
+
+                            setTimeout(function(){
+                                $("#wave").remove();
+                                addAnswer(response)
+                            }, 2000);
+
+                            
                         },
                         error: function() {
-                            errorMessage()
+
+                            setTimeout(function(){
+                                errorMessage()
+                            }, 2000);
+                            
                         }
                     });
 
@@ -166,7 +124,7 @@
                 if(e.which == 13 && !e.shiftKey && $("#inputchat").val() != '') { 
 
 
-                	addMessage($("#inputchat").val())
+                    addMessage($("#inputchat").val())
 
                     var inText = $("#inputchat").val();
                     $("#inputchat").val('');
@@ -175,16 +133,24 @@
                             
                     // Post the content
                     $.ajax({
-                        url: '/',
+                        url: '/api/v1/message',
                         type: 'POST',
                         data: JSON.stringify({'text':inText}),
                         contentType: 'application/json; charset=utf-8',
                         dataType: 'html',
                         success: function(response) {
- 							addAnswer(response)
+                            
+                            setTimeout(function(){
+                                    addAnswer(response)
+                            }, 2000);
+
                         },
                         error: function() {
-                            errorMessage()
+
+                            setTimeout(function(){
+                                errorMessage()
+                            }, 2000);
+
                         }
                     });
                     e.preventDefault();
@@ -193,18 +159,18 @@
             });
 
             function addMessage(msg) {
-                	// Add new text on self side
-                	$("#wave").remove();
-                	$("#quick-replies").remove(); 
-                    $("#checkbox").remove(); 
-                    $("#chatlogs").append($('<div class="chat self"><p class="chat-message">'+msg+'</p></div>', function() {
-                    		$('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
-                    	    $("#chatlogs").append($('<div id="wave" class="chat friend"><p class="chat-message"><span class="jumping-dots"><span class="dot-1">o </span><span class="dot-2">o </span><span class="dot-3">o </span></span></p></div>').show( function () {
-                    	    	$('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
+                    // Add new text on self side
+                    $("#wave").fadeOut(500).remove();
+                    $("#quick-replies").fadeOut(500).remove(); 
+                    $("#checkbox").fadeOut(500).remove(); 
+                    $("#chatlogs").append($('<div class="chat self"><p class="chat-message">'+msg+'</p></div>').hide().fadeIn(500, function() {
+                            $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
+                            $("#chatlogs").append($("<div id='wave' class='chat friend'><p class='chat-message'><span class='jumping-dots'><span class='dot-1'>o </span><span class='dot-2'>o </span><span class='dot-3'>o </span></span></p></div>").hide().fadeIn(500, function () {
+                                $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
 
 
-                    	    	return false;
-                    	    }))
+                                return false;
+                            }))
 
                     })) 
                     console.log($('#wave'))
@@ -212,10 +178,10 @@
             function errorMessage() {
                 chat=$("<div class='chat friend'><p class='chat-message'>I am sorry I am not able to help you with this right now</p></div>")
                 if($("div#wave").length>0) {
-                    $(document).find("div#wave").fadeOut(0, function() {
+                    $(document).find("div#wave").fadeOut(500, function() {
                         console.log("hello")
                         $("#wave").remove();
-                        $("#chatlogs").append(chat.hide().fadeIn(0, function(){
+                        $("#chatlogs").append(chat.hide().fadeIn(500, function(){
                             $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
                         }))
                         
@@ -223,7 +189,7 @@
                 }  
                 else{
                     $("#wave").remove();
-                    $("#chatlogs").append(chat.hide().fadeIn(0, function(){
+                    $("#chatlogs").append(chat.hide().fadeIn(500, function(){
                         $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
                     }))
                 }
@@ -239,68 +205,68 @@
                 console.log($(document).find("div#wave.chat.friend"))
                 console.log($('*'))
                 if($("div#wave").length>0) {
-	                $(document).find("div#wave").remove(function() {
-	                	console.log("hello")
-	                	$("#wave").remove();
-	                    $("#chatlogs").append(chat.show( function(){
-	                    	if(quick.length>0) {
-	                    		$(".chatbox").after(quick.hide().slideDown(0, function () {
-	                    			$('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
-	                    		}))
-	                    	}
-	                    	if(check.length>0) {
-	                    		$(".chatbox").after(check.hide().slideDown(0, function () {
-	                    			$('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
-	                    		}))
-	                    	}
-		                	if(card.length>0) {
-	                    		$(".chatlogs").append(card.hide().fadeIn(0, function () {
-	                    			$('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
-	                    		}))
-	                    	}
-                            if(dropdown.length>0) {
-                                $(".chatlogs").append(dropdown.hide().fadeIn(0, function () {
+                    $(document).find("div#wave").fadeOut(500, function() {
+                        console.log("hello")
+                        $("#wave").remove();
+                        $("#chatlogs").append(chat.hide().fadeIn(500, function(){
+                            if(quick.length>0) {
+                                $(".chatbox").after(quick.hide().slideDown(500, function () {
                                     $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
                                 }))
                             }
-	                    	$('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
-	                    }))
-	                    
-	                });        
-	            }  
-	            else{
-	        		$("#wave").remove();
-	                $("#chatlogs").append(chat.show(function(){
-	                	if(quick.length>0) {
-	                		$(".chatbox").after(quick.hide().slideDown(0, function () {
-	                			$('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
-	                		}))
-	                	}
-	                	if(check.length>0) {
-	                		$(".chatbox").after(check.hide().slideDown(0, function () {
-	                			$('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
-	                		}))
-	                	}	                    	
-	                	if(card.length>0) {
-                    		$(".chatlogs").append(card.hide().fadeIn(0, function () {
-                    			$('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
-                    		}))
-                    	}
-                        if(dropdown.length>0) {
-                            $(".chatlogs").append(dropdown.hide().fadeIn(0, function () {
+                            if(check.length>0) {
+                                $(".chatbox").after(check.hide().slideDown(500, function () {
+                                    $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
+                                }))
+                            }
+                            if(card.length>0) {
+                                $(".chatlogs").append(card.hide().fadeIn(500, function () {
+                                    $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
+                                }))
+                            }
+                            if(dropdown.length>0) {
+                                $(".chatlogs").append(dropdown.hide().fadeIn(500, function () {
+                                    $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
+                                }))
+                            }
+                            $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
+                        }))
+                        
+                    });        
+                }  
+                else{
+                    $("#wave").remove();
+                    $("#chatlogs").append(chat.hide().fadeIn(500, function(){
+                        if(quick.length>0) {
+                            $(".chatbox").after(quick.hide().slideDown(500, function () {
                                 $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
                             }))
                         }
-	                	$('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
-	                }))
-	            }
+                        if(check.length>0) {
+                            $(".chatbox").after(check.hide().slideDown(500, function () {
+                                $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
+                            }))
+                        }                           
+                        if(card.length>0) {
+                            $(".chatlogs").append(card.hide().fadeIn(500, function () {
+                                $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
+                            }))
+                        }
+                        if(dropdown.length>0) {
+                            $(".chatlogs").append(dropdown.hide().fadeIn(500, function () {
+                                $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
+                            }))
+                        }
+                        $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
+                    }))
+                }
             }
 
             $("#send-chat").click(function () {
                 console.log("Test here")
                 if($("#inputchat").val() != '') { 
-                	               	
-                	addMessage($("#inputchat").val())
+                                    
+                    addMessage($("#inputchat").val())
                     // CLEAR TEXT
                     
                     var inText = $("#inputchat").val();
@@ -310,16 +276,21 @@
                             
                     // Post the content
                     $.ajax({
-                        url: '/',
+                        url: '/api/v1/message',
                         type: 'POST',
                         data: JSON.stringify({'text':inText}),
                         contentType: 'application/json; charset=utf-8',
                         dataType: 'html',
                         success: function(response) {
- 							addAnswer(response)
+                            setTimeout(function(){
+                                $("#wave").remove();
+                                addAnswer(response)
+                            }, 2000);
                         },
                         error: function() {
-                            errorMessage()
+                            setTimeout(function(){
+                                errorMessage()
+                            }, 2000);
                         }
                     });
 

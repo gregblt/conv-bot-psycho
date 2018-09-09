@@ -27,6 +27,8 @@
 
         <script type="text/javascript">
         $(function() {
+
+
             for(i = 0; i < $("#chatlogs").children().length; i++)  {
                 $($("#chatlogs").children()[i]).hide().fadeIn(500).delay(400)
                 if(i<$("#chatlogs").children().length-1) {
@@ -34,64 +36,8 @@
                 }
             }
 
-            $(document).on('click','.btn-filter-send', function() {
-                console.log(this.value)
-                if(this.value=='done')  {
-                    dropdown=$(this).parent().parent().parent().parent()
-                    title=$(dropdown).parent().find('#dropdown-title')
-                    $(dropdown).html('<div id="spinner" style="background: transparent;"><div class="loader"></div></div>')
-                    array=$(this).parent().parent().find(".checkbox-input")
-                       console.log(array)
-                       obj={}
-                       for (var i in array) {
-                          //console.log(array[i].is(":checked"));
-                          if(i<array.length) {
-                          obj[$(array[i]).val()]=$(array[i]).is(':checked')
-                        }
-                       }
-                       console.log(obj)
-                   $.ajax({
-                            url: '/get_trips?parameters='+encodeURIComponent(JSON.stringify({'checkbox':{'payload':obj}})),
-                            type: 'GET',
-                            contentType: 'application/json; charset=utf-8',
-                            dataType: 'html',
-                            success: function(response) {
-                                $(dropdown).html(response)
-                                $('.chatlogs').animate({scrollTop:$('.chatlogs').scrollTop() + ($(title).offset().top - $('.chatlogs').offset().top)});
-                            }
-                        }); 
-                }
-                else if(this.value=='clear') {
-                    console.log($(this).parent().parent())
-                    inputs=$(this).parent().parent().find(".checkbox-input:checked")
-                    $(inputs).each(function() {
-                        $(this).parent().css('background-color', '#ffffff');
-                        $(this).prop('checked', false); // Unchecks it
-                    })
-                    console.log(inputs)
-                }
-            });
 
 
-            $(document).on('click','.event-categories', function() {
-                console.log(this.value)
-
-                    dropdown=$(this).parent().parent()
-                    title=$(dropdown).parent().find('#dropdown-title')
-                    $(dropdown).html('<div id="spinner" style="background: transparent;"><div class="loader"></div></div>')
-
-                    $.ajax({
-                            url: '/get_events?cat_id='+this.value,
-                            type: 'GET',
-                            contentType: 'application/json; charset=utf-8',
-                            dataType: 'html',
-                            success: function(response) {
-                                $(dropdown).html(response)
-                                $('.chatlogs').animate({scrollTop:$('.chatlogs').scrollTop() + ($(title).offset().top - $('.chatlogs').offset().top)});
-                            }
-                    }); 
-
-            });
 
             $(document).on('click','.checkbox-input', function() {
 
@@ -104,6 +50,7 @@
                 console.log("UNclickeds")
             }
             });
+
 
             $(document).on('click',"button.btn-checkboxes-send", function()
             {
@@ -125,7 +72,7 @@
                 
                
                $.ajax({
-                        url: '/',
+                        url: '/api/v1/message',
                         type: 'POST',
                         data: JSON.stringify({'checkbox':{'payload':obj}}),
                         contentType: 'application/json; charset=utf-8',
@@ -147,22 +94,33 @@
                 $("#quick-replies").fadeOut(500).remove(); 
                 $("#checkbox").fadeOut(500).remove(); 
                 $("#chatlogs").append($('<div class="chat self"><p class="chat-message">'+msg+'</p></div>').hide().fadeIn(500, function() {
+                        $("#chatlogs").append($("<div id='wave' class='chat friend'><p class='chat-message'><span class='jumping-dots'><span class='dot-1'>o </span><span class='dot-2'>o </span><span class='dot-3'>o </span></span></p></div>").hide().fadeIn(500, function() {
                         $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
+                    }))
 
-                })) 
+                }))
 
                $.ajax({
-                        url: '/',
+                        url: '/api/v1/message',
                         type: 'POST',
                         data: JSON.stringify({'quick_reply':{'payload':msg}}),
                         contentType: 'application/json; charset=utf-8',
                         dataType: 'html',
                         success: function(response) {
-                            addAnswer(response)
-                            $("#wave").remove();
+
+                            setTimeout(function(){
+                                $("#wave").remove();
+                                addAnswer(response)
+                            }, 2000);
+
+                            
                         },
                         error: function() {
-                            errorMessage()
+
+                            setTimeout(function(){
+                                errorMessage()
+                            }, 2000);
+                            
                         }
                     });
 
@@ -183,16 +141,24 @@
                             
                     // Post the content
                     $.ajax({
-                        url: '/',
+                        url: '/api/v1/message',
                         type: 'POST',
                         data: JSON.stringify({'text':inText}),
                         contentType: 'application/json; charset=utf-8',
                         dataType: 'html',
                         success: function(response) {
-                            addAnswer(response)
+                            
+                            setTimeout(function(){
+                                    addAnswer(response)
+                            }, 2000);
+
                         },
                         error: function() {
-                            errorMessage()
+
+                            setTimeout(function(){
+                                errorMessage()
+                            }, 2000);
+
                         }
                     });
                     e.preventDefault();
@@ -207,7 +173,7 @@
                     $("#checkbox").fadeOut(500).remove(); 
                     $("#chatlogs").append($('<div class="chat self"><p class="chat-message">'+msg+'</p></div>').hide().fadeIn(500, function() {
                             $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
-                            $("#chatlogs").append($('<div id="wave" class="chat friend"><p class="chat-message"><span class="jumping-dots"><span class="dot-1">o </span><span class="dot-2">o </span><span class="dot-3">o </span></span></p></div>').hide().fadeIn(500, function () {
+                            $("#chatlogs").append($("<div id='wave' class='chat friend'><p class='chat-message'><span class='jumping-dots'><span class='dot-1'>o </span><span class='dot-2'>o </span><span class='dot-3'>o </span></span></p></div>").hide().fadeIn(500, function () {
                                 $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
 
 
@@ -318,16 +284,21 @@
                             
                     // Post the content
                     $.ajax({
-                        url: '/',
+                        url: '/api/v1/message',
                         type: 'POST',
                         data: JSON.stringify({'text':inText}),
                         contentType: 'application/json; charset=utf-8',
                         dataType: 'html',
                         success: function(response) {
-                            addAnswer(response)
+                            setTimeout(function(){
+                                $("#wave").remove();
+                                addAnswer(response)
+                            }, 2000);
                         },
                         error: function() {
-                            errorMessage()
+                            setTimeout(function(){
+                                errorMessage()
+                            }, 2000);
                         }
                     });
 

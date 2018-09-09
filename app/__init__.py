@@ -22,7 +22,7 @@ db = SQLAlchemy(app)
 
 from app.models import Conversations
 
-def init_conv(template):
+def init_conv(template,bot_name):
     
     cookie=str(uuid.uuid4());
     resp = make_response(render_template(template,
@@ -32,6 +32,7 @@ def init_conv(template):
                             )    
                         )
     resp.set_cookie('userId-psycho-bot', cookie)
+    resp.set_cookie('botName-psycho-bot', bot_name)
     current = json.dumps({
                     'current_step':BotLogic.STEP_GET_NAME,
                     'user_name':None
@@ -49,7 +50,7 @@ def receive_message():
 
     
     if request.method == 'GET':
-        return init_conv('chat.html')
+        return init_conv('chat.html','jacques')
 
     if request.method == 'POST':
         	return "not implemented"
@@ -63,6 +64,9 @@ def post_message():
         # Get conv status
         conversation=Conversations.query.filter_by(cookie=request.cookies['userId-psycho-bot']).first()
 
+        # Get which bot
+        bot_name=Conversations.query.filter_by(cookie=request.cookies['botName-psycho-bot']).first()
+
         # Get next answer
         bot=BotLogic(current=json.loads(conversation.current))
         ans=bot.get_next_answer(message=data['text'])
@@ -74,8 +78,13 @@ def post_message():
                 print(value['text'])
             if 'img' in value:
                 img.append(value['img'])
-        resp = make_response(render_template('msg_bot_nice.html',
-                                         chat=chat,img=img))
+
+        if bot_name == "bernard":
+            resp = make_response(render_template('msg_bot_nice.html',
+                                             chat=chat,img=img))
+        else:
+            resp = make_response(render_template('msg_bot.html',
+                                 chat=chat,img=img))
         # Update db
         current = bot.get_attributes()
         conversation.current=json.dumps(current)
@@ -88,7 +97,7 @@ def post_message():
 def receive_message_nice():
 
     if request.method == 'GET':
-        return init_conv('chat_nice.html')
+        return init_conv('chat_nice.html','bernard')
        
     if request.method == 'POST':
         	return "not implemented"
@@ -97,21 +106,9 @@ def receive_message_nice():
 @app.route("/robert", methods=['GET', 'POST'])
 def receive_message_ugly():
 
-    
     if request.method == 'GET':
-        userId=str(uuid.uuid4());
-        resp = make_response(render_template('chat_ugly.html',
-                                             chat=["Hi there."],quickReplies=[{'title':"Good",'payload':"good"}
-                                             ,{'payload':'bad','title':"I have been better"}]
-
-                                             
-                                )    
-                            )
-        resp.set_cookie('userId-travelbot', userId)
-        db2.append({'id':userId,'current':{'currentStep':2,'city':'','searchResults':[],'currentCursor':0,
-                   'active':None,'metropolitan':None}})
-                        
-        return resp
+        return init_conv('chat_ugly.html','robert')
+       
     if request.method == 'POST':
-        return "not implemented"
+            return "not implemented"
         
