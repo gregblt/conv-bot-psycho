@@ -50,7 +50,7 @@ def receive_message():
 
     
     if request.method == 'GET':
-        return init_conv('chat.html','jacques')
+        return init_conv('chat.html','Jacques')
 
     if request.method == 'POST':
         	return "not implemented"
@@ -65,10 +65,10 @@ def post_message():
         conversation=Conversations.query.filter_by(cookie=request.cookies['userId-psycho-bot']).first()
 
         # Get which bot
-        bot_name=Conversations.query.filter_by(cookie=request.cookies['botName-psycho-bot']).first()
-
+        bot_name=request.cookies['botName-psycho-bot']
+        print(bot_name)
         # Get next answer
-        bot=BotLogic(current=json.loads(conversation.current))
+        bot=BotLogic(current=json.loads(conversation.current),name=bot_name)
         ans=bot.get_next_answer(message=data['text'])
         chat=[]
         img=[]
@@ -79,7 +79,7 @@ def post_message():
             if 'img' in value:
                 img.append(value['img'])
 
-        if bot_name == "bernard":
+        if bot_name == "Bernard":
             resp = make_response(render_template('msg_bot_nice.html',
                                              chat=chat,img=img))
         else:
@@ -87,6 +87,7 @@ def post_message():
                                  chat=chat,img=img))
         # Update db
         current = bot.get_attributes()
+        print(current)
         conversation.current=json.dumps(current)
         db.session.commit()
         
@@ -97,7 +98,7 @@ def post_message():
 def receive_message_nice():
 
     if request.method == 'GET':
-        return init_conv('chat_nice.html','bernard')
+        return init_conv('chat_nice.html','Bernard')
        
     if request.method == 'POST':
         	return "not implemented"
@@ -107,7 +108,7 @@ def receive_message_nice():
 def receive_message_ugly():
 
     if request.method == 'GET':
-        return init_conv('chat_ugly.html','robert')
+        return init_conv('chat_ugly.html','Robert')
        
     if request.method == 'POST':
             return "not implemented"

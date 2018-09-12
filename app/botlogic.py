@@ -25,8 +25,11 @@ class BotLogic:
     user_name=None
     privacy_asked=False
     capabilities_asked=False
+    lost=False
+    reason_given=False
+    lost_count = 0
     
-    def __init__(self, current=None):
+    def __init__(self, current=None, name=None):
         
         if(current!=None):
             if 'current_step' in current:
@@ -37,27 +40,43 @@ class BotLogic:
                 self.privacy_asked=current['privacy_asked']
             if 'capabilities_asked' in current:
                 self.capabilities_asked=current['capabilities_asked']
+            if 'lost' in current:
+                self.lost = current['lost']
+            if 'lost_count' in current:
+                self.lost_count = current['lost_count']
+            if name:
+                self.name=name
                 
     def get_step_get_name_answer(self, message=''):
 
         # Getting name
         # Checking the number of words in the answer
         name_found=False
+        ask_name=False
         if(len(message.split())>1):
             # If there is more than on word, we make a call to recast.ai
             res = request.analyse_text(message)
             # Let's check if we find a name
-            if len(res.entities) > 0:
-                for entity in res.entities:
-                    if entity.name == 'person':
-                        self.user_name=entity.fullname.title()
-                        name_found=True
+            if len(res.intents) > 0:
+                for intent in res.intents:
+                    if intent.slug == 'ask-creator':
+                        ask_name=True
                         break
+                if not ask_name and len(res.entities) > 0:
+                    for entity in res.entities:
+                        if entity.name == 'person':
+                            self.user_name=entity.fullname.title()
+                            name_found=True
+                            break
         else:
             self.user_name=message.title()
             name_found=True
         
-        if name_found:
+        if ask_name:
+            text = 'My name is {}! And you?' \
+            .format(self.name)
+            return [{'text': text}]
+        elif name_found:
             self.current_step=self.STEP_CONVERSATION
             text = 'Nice to meet you {}! I am so excited to talk to you 😊.' \
             .format(self.user_name)
@@ -84,7 +103,7 @@ class BotLogic:
                     challenges."""}]
                     return ans
                 
-                if intent.slug == 'ask-bot' and self.capabilities_asked:
+                if (intent.slug == 'ask-bot' or intent.slug == 'get-help') and self.capabilities_asked:
                     ans = [{'text':"""Well, we don’t know each other well yet, 
                             so yes, I need some time to get to know you in order 
                             for me to give you some advice on problems you might 
@@ -120,7 +139,12 @@ class BotLogic:
                                      this morning?"""})
                     return ans
 
-
+        self.lost=True
+        self.lost_count += 1
+        if( self.lost_count > 1):
+            self.current_step=self.STEP_GET_MOOD
+            return [{'text': """What’s your mood like 
+                         this today?"""}]
         return [{'text': """It looks like I am getting tired, 
                        I do not know what to say... 😓"""}]  
     
@@ -223,7 +247,27 @@ class BotLogic:
                     ans=[{'text':'See you soon!'},{'img':'./static/img/hug.gif'}]
                     self.current_step=self.STEP_HALT_CONV
                     return ans
-        
+                
+        # If lost, check for "why?"
+        if self.lost :
+            if res.act == "wh-query" and \
+            (res.type == "desc:desc" or res.type == "desc:reason"):
+                ans = [{'text':"""Because my maker has not fed me enough 
+                        today. I might not be able to answer you properly. 
+                        Sorry, I am just giving you a heads-up, just in 
+                        case I tell you things that do not make sense."""}]
+                if self.current_step == self.STEP_CONVERSATION:
+                    ans.append({"text":"""My favourite 
+                         subject is artificial intelligence, 
+                         if that is something you would like to talk about."""})
+                    return ans
+
+                else:
+                    ans.append({"text":"""My favourite 
+                         subject is artificial intelligence, 
+                         if that is something you would like to talk about."""})
+                    return ans
+                
         if self.current_step == self.STEP_GET_NAME:               
             answer = self.get_step_get_name_answer(message=message)
                 
@@ -244,6 +288,8 @@ class BotLogic:
             answer = self.get_step_ask_hear_more_answer(message=message)
                        
         else:
+            self.lost = True
+            self.lost_count += 1
             answer = [{'text': """It looks like I am getting tired, 
                        I do not know what to say... 😓"""}]
         
@@ -255,6 +301,8 @@ class BotLogic:
                     'current_step':self.current_step,
                     'user_name':self.user_name,
                     'capabilities_asked':self.capabilities_asked,
-                    'privacy_asked':self.privacy_asked                   
+                    'privacy_asked':self.privacy_asked, 
+                    'lost':self.lost,
+                    'lost_count':self.lost_count
                 }
 
