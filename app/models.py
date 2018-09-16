@@ -14,7 +14,10 @@ class Conversations(db.Model):
     __tablename__ = 'conversations'
 
     cookie = db.Column(db.String(1024), primary_key=True)
-    current = db.Column(db.String(1024))
+    currentBernard = db.Column(db.String(1024))
+    currentRobert = db.Column(db.String(1024))
+    currentJacques = db.Column(db.String(1024))
+    
 
     def __repr__(self):
         return '<Cookie %r>' % (self.cookie)

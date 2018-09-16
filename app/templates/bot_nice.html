@@ -145,7 +145,7 @@
                     $.ajax({
                         url: '/api/v1/message',
                         type: 'POST',
-                        data: JSON.stringify({'text':inText}),
+                        data: JSON.stringify({'text':inText,'bot':'Bernard'}),
                         contentType: 'application/json; charset=utf-8',
                         dataType: 'html',
                         success: function(response) {
@@ -170,6 +170,7 @@
 
             function addMessage(msg) {
                     // Add new text on self side
+                    $('#inputchat').attr('disabled', true);
                     $("#wave").fadeOut(500).remove();
                     $("#quick-replies").fadeOut(500).remove(); 
                     $("#checkbox").fadeOut(500).remove(); 
@@ -207,40 +208,60 @@
 
             function addAnswer(response) {
                 chat=$(response).filter('div.chat.friend')
+                console.log(chat)
                 quick=$(response).filter('#quick-replies')
                 check=$(response).filter('#checkbox')
                 card=$(response).filter('.card-container')
                 dropdown=$(response).filter('.dropdown-container')
-                console.log(chat)
                 console.log($(document).find("div#wave.chat.friend"))
                 console.log($('*'))
                 if($("div#wave").length>0) {
-                    $(document).find("div#wave").fadeOut(500, function() {
+                    $(document).find("div#wave").fadeOut(500, async function() {
                         console.log("hello")
-                        $("#wave").remove();
-                        $("#chatlogs").append(chat.hide().fadeIn(500, function(){
-                            if(quick.length>0) {
-                                $(".chatbox").after(quick.hide().slideDown(500, function () {
-                                    $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
-                                }))
-                            }
-                            if(check.length>0) {
-                                $(".chatbox").after(check.hide().slideDown(500, function () {
-                                    $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
-                                }))
-                            }
-                            if(card.length>0) {
-                                $(".chatlogs").append(card.hide().fadeIn(500, function () {
-                                    $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
-                                }))
-                            }
-                            if(dropdown.length>0) {
-                                $(".chatlogs").append(dropdown.hide().fadeIn(500, function () {
-                                    $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
-                                }))
-                            }
-                            $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
-                        }))
+                        function addFromArray(chatArray) {
+                        	$("#wave").remove();
+													$(chatArray[0]).hide().appendTo($("#chatlogs")).fadeIn(1000, function(){
+														if (chatArray.length > 1) {
+                        			$("<div id='wave' class='chat friend'><div class='friend-photo'><img src='../static/img/sq33.png' style='float:left;height:40px; width:40px;'></div><p class='chat-message'><span class='jumping-dots'><span class='dot-1'>o </span><span class='dot-2'>o </span><span class='dot-3'>o </span></span></p></div>").hide().appendTo($("#chatlogs")
+                        			).fadeIn(1000, function () {
+                                $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
+		                            setTimeout(function(){
+		                               addFromArray(chatArray.slice(1,chatArray.length))
+		                            }, 1000);
+                                
+                            	})
+                        		}
+                        		else {
+                        			$('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
+                        			return 0
+                        		}
+                        	})
+                        }
+                        addFromArray(chat)
+                        $('#inputchat').attr('disabled', false);
+                        // $("#chatlogs").append(chat.hide().fadeIn(500, function(){
+                        //     if(quick.length>0) {
+                        //         $(".chatbox").after(quick.hide().slideDown(500, function () {
+                        //             $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
+                        //         }))
+                        //     }
+                        //     if(check.length>0) {
+                        //         $(".chatbox").after(check.hide().slideDown(500, function () {
+                        //             $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
+                        //         }))
+                        //     }
+                        //     if(card.length>0) {
+                        //         $(".chatlogs").append(card.hide().fadeIn(500, function () {
+                        //             $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
+                        //         }))
+                        //     }
+                        //     if(dropdown.length>0) {
+                        //         $(".chatlogs").append(dropdown.hide().fadeIn(500, function () {
+                        //             $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
+                        //         }))
+                        //     }
+                        //     $('#chatlogs').animate({scrollTop:$("#chatlogs")[0].scrollHeight});
+                        // }))
                         
                     });        
                 }  
@@ -288,7 +309,7 @@
                     $.ajax({
                         url: '/api/v1/message',
                         type: 'POST',
-                        data: JSON.stringify({'text':inText}),
+                        data: JSON.stringify({'text':inText,'bot':'Bernard'}),
                         contentType: 'application/json; charset=utf-8',
                         dataType: 'html',
                         success: function(response) {

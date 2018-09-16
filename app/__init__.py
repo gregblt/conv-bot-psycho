@@ -24,22 +24,39 @@ from app.models import Conversations
 
 def init_conv(template,bot_name):
     
-    cookie=str(uuid.uuid4());
+
     resp = make_response(render_template(template,
                                          chat=["Hi there  👋 ! What is your name?"]
 
                                          
                             )    
                         )
-    resp.set_cookie('userId-psycho-bot', cookie)
-    resp.set_cookie('botName-psycho-bot', bot_name)
+    
+    
     current = json.dumps({
-                    'current_step':BotLogic.STEP_GET_NAME,
-                    'user_name':None
+                    'current_step':BotLogic.STEP_GET_NAME
             })
-    u = Conversations(cookie = cookie, current=current)
-    print("user created", u)
-    db.session.add(u)
+    u=None
+    if 'userId-psycho-bot' in request.cookies:
+        u = Conversations.query.filter_by(cookie=request.cookies['userId-psycho-bot']).first()
+        
+    if u:
+        if(bot_name=='Robert'):
+            u.currentRobert = current
+        elif(bot_name=='Jacques'):
+            u.currentJacques = current
+        elif(bot_name=='Bernard'):
+            u.currentBernard = current
+    else:      
+        cookie=str(uuid.uuid4());
+        resp.set_cookie('userId-psycho-bot', cookie)
+        u = Conversations(cookie = cookie,
+                          currentBernard=current,
+                          currentJacques=current,
+                          currentRobert=current)
+        print("user created", u)
+        db.session.add(u)
+        
     db.session.commit()
                     
     return resp
@@ -65,10 +82,18 @@ def post_message():
         conversation=Conversations.query.filter_by(cookie=request.cookies['userId-psycho-bot']).first()
 
         # Get which bot
-        bot_name=request.cookies['botName-psycho-bot']
+        bot_name=data['bot']
         print(bot_name)
         # Get next answer
-        bot=BotLogic(current=json.loads(conversation.current),name=bot_name)
+        curr={}
+        if(bot_name=='Robert'):
+            curr=conversation.currentRobert
+        elif(bot_name=='Jacques'):
+            curr=conversation.currentJacques
+        elif(bot_name=='Bernard'):
+            curr=conversation.currentBernard
+            
+        bot=BotLogic(current=json.loads(curr),name=bot_name)
         ans=bot.get_next_answer(message=data['text'])
         chat=[]
         img=[]
@@ -88,7 +113,13 @@ def post_message():
         # Update db
         current = bot.get_attributes()
         print(current)
-        conversation.current=json.dumps(current)
+        if(bot_name=='Robert'):
+            conversation.currentRobert=json.dumps(current)
+        elif(bot_name=='Jacques'):
+            conversation.currentJacques=json.dumps(current)
+        elif(bot_name=='Bernard'):
+            conversation.currentBernard=json.dumps(current)
+        
         db.session.commit()
         
         # Return response to client
