@@ -105,11 +105,14 @@ def post_message():
                 img.append(value['img'])
 
         if bot_name == "Bernard":
-            resp = make_response(render_template('msg_bot_nice.html',
-                                             chat=chat,img=img))
+            resp = make_response(render_template('msg_bot_face.html',
+                                             chat=chat,img=img,face="../static/img/sq33.png"))
+        elif bot_name == "Robert":
+            resp = make_response(render_template('msg_bot_face.html',
+                                 chat=chat,img=img,face="../static/img/sq22.png"))
         else:
-            resp = make_response(render_template('msg_bot.html',
-                                 chat=chat,img=img))
+            resp = make_response(render_template('msg_bot_face.html',
+                                 chat=chat,img=img,face="../static/img/sq11.jpg"))            
         # Update db
         current = bot.get_attributes()
         print(current)
