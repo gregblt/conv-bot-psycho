@@ -14,4 +14,4 @@ Flask-Script
 Flask-SQLAlchemy
 psycopg2
 nltk
-flask-socketio
+flask-socketio==0.6.0
