@@ -4,7 +4,7 @@ import uuid
 
 from flask_socketio import SocketIO
 app.config['SECRET_KEY'] = 'vnkdjnfjknfl1232#'
-socketio = SocketIO(app,async_mode=eventlet)
+socketio = SocketIO(app)
 
 clients = {};
 
