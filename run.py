@@ -39,4 +39,9 @@ def handle_my_custom_event(json, methods=['GET', 'POST']):
 if __name__ == '__main__':
 
   #app.run()
-  socketio.run(app, debug=True, port=33505)
+
+  import os
+  PORT = os.environ['PORT']
+  print("Gunicorn conf using port: " + PORT)
+  socketio.run(app, host='127.0.0.1', port=PORT, resource="socket.io", policy_server=False, debug=True)
+  #socketio.run(app, debug=True, port=33505)
