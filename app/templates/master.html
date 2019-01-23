@@ -54,6 +54,7 @@
       var current_user = "";
     	var users = {};
       var socket = io.connect('https://' + document.domain + ':' + location.port);
+      console.log(location.port)
       socket.on( 'connect', function() {
         socket.emit( 'connect_master', {
         } )
