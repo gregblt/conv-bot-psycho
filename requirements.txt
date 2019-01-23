@@ -16,3 +16,6 @@ Flask-SQLAlchemy
 psycopg2
 nltk
 flask-socketio
+gevent
+gevent-socketio
+gevent-websocket
