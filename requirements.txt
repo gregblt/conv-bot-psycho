@@ -13,5 +13,5 @@ Flask-Migrate
 Flask-Script
 Flask-SQLAlchemy
 psycopg2
-#nltk
+nltk
 flask-socketio
