@@ -7,6 +7,7 @@ pytz
 requests
 apscheduler
 recastai
+eventlet
 alembic
 Flask-Migrate
 Flask-Script
