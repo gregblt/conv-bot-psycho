@@ -1,6 +1,6 @@
 Flask==0.12.2
 Jinja2==2.9.6
-gunicorn=18.0
+gunicorn==18.0
 flask_cors
 flask_httpauth
 pytz
