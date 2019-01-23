@@ -24,8 +24,22 @@
   js.src = 'https://connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v3.0&appId=170159587033924&autoLogAppEvents=1';
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
         <script type="text/javascript">
+
+          // Socket IO Connect
+          var client_uuid = null;
+          var socket = io.connect('http://' + document.domain + ':' + location.port);
+          socket.on( 'connect', function() {
+            socket.emit( 'connect_user', {
+              data: 'User Connected'
+            } )
+          } )
+          socket.on( 'user_connected', function( msg ) {
+            console.log( msg )
+            client_uuid = msg.uuid;
+          })
+
         $(function() {
 
 
@@ -137,30 +151,34 @@
                     var inText = $("#inputchat").val();
                     $("#inputchat").val('');
                     // CLEAR QUICK-REPLIES
-                    
+                         socket.emit( 'new_user_msg', {
+                        user_name : client_uuid,
+                        message : inText,
+                        bot : "Robert"
+                      } )                 
                             
                     // Post the content
-                    $.ajax({
-                        url: '/api/v1/message',
-                        type: 'POST',
-                        data: JSON.stringify({'text':inText,'bot':'Robert'}),
-                        contentType: 'application/json; charset=utf-8',
-                        dataType: 'html',
-                        success: function(response) {
+                    // $.ajax({
+                    //     url: '/api/v1/message',
+                    //     type: 'POST',
+                    //     data: JSON.stringify({'text':inText,'bot':'Robert'}),
+                    //     contentType: 'application/json; charset=utf-8',
+                    //     dataType: 'html',
+                    //     success: function(response) {
                             
-                            setTimeout(function(){
-                                    addAnswer(response)
-                            }, 2000);
+                    //         setTimeout(function(){
+                    //                 addAnswer(response)
+                    //         }, 2000);
 
-                        },
-                        error: function() {
+                    //     },
+                    //     error: function() {
 
-                            setTimeout(function(){
-                                errorMessage()
-                            }, 2000);
+                    //         setTimeout(function(){
+                    //             errorMessage()
+                    //         }, 2000);
 
-                        }
-                    });
+                    //     }
+                    // });
                     e.preventDefault();
                     return false;
                 }
@@ -168,7 +186,7 @@
 
             function addMessage(msg) {
                     // Add new text on self side
-                    $('#inputchat').attr('disabled', true);
+                    //$('#inputchat').attr('disabled', true);
                     $("#wave").fadeOut(500).remove();
                     $("#quick-replies").fadeOut(500).remove(); 
                     $("#checkbox").fadeOut(500).remove(); 
@@ -267,6 +285,14 @@
                 }
             }
 
+          // On answer
+
+          socket.on( 'to_client', function( msg ) {
+            console.log( msg )
+            var htm = "<div class='chat friend'><div class='friend-photo'><img src='../static/img/sq22.png' style='float:left;height:40px; width:40px;'></div><p class='chat-message'>"+msg.message+"</p></div>"
+            addAnswer(htm);
+          })
+
             $("#send-chat").click(function () {
                 console.log("Test here")
                 if($("#inputchat").val() != '') { 
@@ -278,26 +304,32 @@
                     $("#inputchat").val('');
                     // CLEAR QUICK-REPLIES
                     $("#quick-replies").remove(); 
+
+                      socket.emit( 'new_user_msg', {
+                        user_name : client_uuid,
+                        message : inText,
+                        bot : "Robert"
+                      } )
                             
                     // Post the content
-                    $.ajax({
-                        url: '/api/v1/message',
-                        type: 'POST',
-                        data: JSON.stringify({'text':inText,'bot':'Robert'}),
-                        contentType: 'application/json; charset=utf-8',
-                        dataType: 'html',
-                        success: function(response) {
-                            setTimeout(function(){
-                                $("#wave").remove();
-                                addAnswer(response)
-                            }, 2000);
-                        },
-                        error: function() {
-                            setTimeout(function(){
-                                errorMessage()
-                            }, 2000);
-                        }
-                    });
+                    // $.ajax({
+                    //     url: '/api/v1/message',
+                    //     type: 'POST',
+                    //     data: JSON.stringify({'text':inText,'bot':'Robert'}),
+                    //     contentType: 'application/json; charset=utf-8',
+                    //     dataType: 'html',
+                    //     success: function(response) {
+                    //         setTimeout(function(){
+                    //             $("#wave").remove();
+                    //             addAnswer(response)
+                    //         }, 2000);
+                    //     },
+                    //     error: function() {
+                    //         setTimeout(function(){
+                    //             errorMessage()
+                    //         }, 2000);
+                    //     }
+                    // });
 
                 }
             });

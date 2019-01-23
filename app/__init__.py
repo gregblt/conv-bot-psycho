@@ -14,11 +14,13 @@ import os
 import uuid
 from app.botlogic import BotLogic
 
+
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 
 db = SQLAlchemy(app)
+
 
 from app.models import Conversations
 
@@ -71,6 +73,17 @@ def receive_message():
 
     if request.method == 'POST':
         	return "not implemented"
+
+ #We will receive messages that Facebook sends our bot at this endpoint 
+@app.route("/master", methods=['GET', 'POST'])
+def receive_message_master():
+
+    
+    if request.method == 'GET':
+            return make_response(render_template('master.html'))   
+
+    if request.method == 'POST':
+            return "not implemented"
     
 @app.route("/api/v1/message",  methods=['POST'])
 def post_message():
@@ -94,7 +107,8 @@ def post_message():
             curr=conversation.currentBernard
             
         bot=BotLogic(current=json.loads(curr),name=bot_name)
-        ans=bot.get_next_answer(message=data['text'])
+        #ans=bot.get_next_answer(message=data['text'])
+        ans=[{'text': "Hello!"}]
         chat=[]
         img=[]
         for value in ans:
@@ -132,7 +146,8 @@ def post_message():
 def receive_message_nice():
 
     if request.method == 'GET':
-        return init_conv('chat_nice.html','Bernard')
+        #return init_conv('chat_nice.html','Bernard')
+        return render_template('chat_nice.html')
        
     if request.method == 'POST':
         	return "not implemented"

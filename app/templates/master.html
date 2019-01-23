@@ -1,0 +1,105 @@
+ <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <title>Flask_Chat_App</title>
+  </head>
+  <body>
+
+    <div style='display: flex;flex-direction: row;'>
+      <ul class="name_holder" style='border-right: 5px solid black;margin-right:20px;padding-right: 20px;min-height: 100%;'>
+        
+      </ul>
+      <div>
+        <div class="message_holder"></div>
+        <form action="" method="POST">
+          <input type="text" class="message" placeholder="Messages"/>
+          <input type="submit"/>
+        </form>
+      </div>
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+    <script type="text/javascript">
+
+     function display(elem) {
+        var id = $(elem).attr("id");
+        console.log(elem);
+        console.log(id);
+        if(current_user!="") {
+          $("li#"+current_user).css( "background-color","white" )
+        }
+        
+        current_user = id;
+        $(elem).parent().css( "background-color","blue" )
+        displayChat(users[current_user].chat)
+     };
+
+     function displayChat(chats) {
+      console.log(chats);
+      $( 'div.message_holder' ).empty();
+      for(var i = 0; i<chats.length; i++) {
+        str="";
+        if(chats[i].who == "user") {
+          str="User";
+        }
+        else{
+          str="Me";
+        }
+        $( 'div.message_holder' ).append( '<div><b style="color: #000">'+str+'</b> '+chats[i].msg+'</div>' )
+      }
+     }
+
+      var current_user = "";
+    	var users = {};
+      var socket = io.connect('http://' + document.domain + ':' + location.port);
+      socket.on( 'connect', function() {
+        socket.emit( 'connect_master', {
+        } )
+        var form = $( 'form' ).on( 'submit', function( e ) {
+          e.preventDefault()
+          let user_input = $( 'input.message' ).val()
+          $( 'h3' ).remove()
+          $( 'div.message_holder' ).append( '<div><b style="color: #000">'+'Me'+'</b> '+user_input+'</div>' )
+          users[current_user].chat.push({"who":"me","msg":user_input})
+          socket.emit( 'new_master_msg', {
+            message : user_input,
+            user : current_user
+          } )
+          $( 'input.message' ).val( '' ).focus()
+        } )
+      } )
+      socket.on( 'to_master', function( msg ) {
+        // if( typeof msg.user_name !== 'undefined' ) {
+        //   $( 'h3' ).remove()
+        //   $( 'div.message_holder' ).append( '<div><b style="color: #000">'+msg.sid+'</b> '+msg.message+'</div>' )
+        // }
+        if(! (msg.sid in users) ) {
+          users[msg.sid] = {'chat':[{"who":"user","msg":msg.message}]};
+          $( 'h3' ).remove()
+          $( 'ul.name_holder' ).prepend( '<li id="'+msg.sid+'" class="li-name" style="border-bottom:1px solid grey;padding:10px;background:grey;"><a id="'+msg.sid+'" href="#" onClick="display(this);">'+msg.sid+' ('+msg.bot+')</a></li>' )
+        }
+        else {
+          users[msg.sid].chat.push({"who":"user","msg":msg.message})
+          console.log("current user")
+          console.log(msg.sid)
+          console.log(current_user)
+          
+          if(current_user==msg.sid) {
+            console.log("appending")
+            $( 'div.message_holder' ).append( '<div><b style="color: #000">'+'User'+'</b> '+msg.message+'</div>' )
+            $( "li#"+msg.sid ).remove();
+            $( 'ul.name_holder' ).prepend( '<li id="'+msg.sid+'" class="li-name" style="border-bottom:1px solid grey;padding:10px;background:blue;"><a id="'+msg.sid+'" href="#" onClick="display(this);">'+msg.sid+' ('+msg.bot+')</a></li>' )
+          }
+          else {
+            $( "li#"+msg.sid ).remove();
+            $( 'ul.name_holder' ).prepend( '<li id="'+msg.sid+'" class="li-name" style="border-bottom:1px solid grey;padding:10px;background:grey;"><a id="'+msg.sid+'" href="#" onClick="display(this);">'+msg.sid+' ('+msg.bot+')</a></li>' )
+          }
+          
+        }
+      })
+    </script>
+
+  </body>
+  </html>
