@@ -18,6 +18,7 @@ from app.botlogic import BotLogic
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+app.config['DEBUG'] = True
 
 db = SQLAlchemy(app)
 
