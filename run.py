@@ -11,26 +11,26 @@ clients = {};
 def messageReceived(methods=['GET', 'POST']):
     print('message was received!!!')
 
-@socketio.on('connect_master')
+@socketio.on('connect_master',namespace='/test')
 def handle_my_custom_event(json, methods=['GET', 'POST']):
     print('received my event: '+ str(json))
     socketio.emit('my response', json, callback=messageReceived)
 
-@socketio.on('connect_user')
+@socketio.on('connect_user',namespace='/test')
 def handle_my_custom_event(json, methods=['GET', 'POST']):
     print('received my event: '+ str(json))
     uuid_user = str(uuid.uuid4());
     clients[request.sid]=(request.namespace);
     socketio.emit('user_connected', {'uuid':uuid_user}, callback=messageReceived)
 
-@socketio.on('new_user_msg')
+@socketio.on('new_user_msg',namespace='/test')
 def handle_my_custom_event(json, methods=['GET', 'POST']):
     print('received my event: '+ str(json))
     print(request.sid)
     json['sid'] = request.sid
     socketio.emit('to_master', json, callback=messageReceived)
 
-@socketio.on('new_master_msg')
+@socketio.on('new_master_msg',namespace='/test')
 def handle_my_custom_event(json, methods=['GET', 'POST']):
     print('received my event: '+ str(json))
     socketio.emit('to_client', json, callback=messageReceived, room=json['user'])

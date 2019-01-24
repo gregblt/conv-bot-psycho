@@ -53,8 +53,8 @@
 
       var current_user = "";
     	var users = {};
-      var HOST = location.origin.replace(/^http/, 'ws')
-      var socket = io.connect(HOST);
+var protocol = window.location.protocol;
+var socket = io.connect(protocol + '//' + document.domain + ':' + location.port + namespace);
       socket.on( 'connect', function() {
         socket.emit( 'connect_master', {
         } )
