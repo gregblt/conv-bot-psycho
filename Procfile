@@ -1,2 +1,2 @@
-web: gunicorn --worker-class=eventlet --log-level=DEBUG -w 1 app:app
+web: uwsgi --http :5000 --gevent 1000 --http-websockets --master --wsgi-file run.py --callable app
 
