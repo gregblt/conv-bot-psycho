@@ -53,6 +53,7 @@
 
       var current_user = "";
     	var users = {};
+            var namespace = "/test";
       var protocol = window.location.protocol;
       var socket = io.connect(protocol + '//' + document.domain + ':' + location.port + namespace);
       socket.on( 'connect', function() {
