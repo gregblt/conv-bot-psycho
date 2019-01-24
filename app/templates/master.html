@@ -55,7 +55,7 @@
     	var users = {};
             var namespace = "/test";
       var protocol = window.location.protocol;
-      var socket = io.connect(protocol + '//' + document.domain + ':' + location.port + namespace);
+      var socket = io.connect(namespace);
       socket.on( 'connect', function() {
         socket.emit( 'connect_master', {
         } )
