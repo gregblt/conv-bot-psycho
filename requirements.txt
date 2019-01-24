@@ -6,7 +6,6 @@ flask_httpauth
 pytz
 requests
 apscheduler
-gevent
 recastai
 eventlet
 alembic
