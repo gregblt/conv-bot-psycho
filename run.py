@@ -1,10 +1,11 @@
 from app import app
 from flask import request
 import uuid
+import os
 
 from flask_socketio import SocketIO
 app.config['SECRET_KEY'] = 'vnkdjnfjknfl1232#'
-socketio = SocketIO(app,engineio_logger=True)
+socketio = SocketIO(app,engineio_logger=True,async_mode="eventlet")
 print(int(os.environ.get('PORT')))
 clients = {};
 
