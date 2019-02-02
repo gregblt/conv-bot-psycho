@@ -1,4 +1,4 @@
-Flask==1.0.2
+Flask
 Jinja2==2.9.6
 gunicorn==18.0
 flask_cors
