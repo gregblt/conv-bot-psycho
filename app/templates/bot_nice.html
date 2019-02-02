@@ -32,9 +32,7 @@
 
           // Socket IO Connect
           var client_uuid = null;
-      var protocol = window.location.protocol;
-      var namespace = "/test";
-      var socket = io.connect(namespace);
+          var socket = io.connect('http://' + document.domain + ':' + location.port);
           socket.on( 'connect', function() {
             socket.emit( 'connect_user', {
               data: 'User Connected'
