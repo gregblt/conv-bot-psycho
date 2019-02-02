@@ -147,8 +147,8 @@ def post_message():
 def receive_message_nice():
 
     if request.method == 'GET':
-        #return init_conv('chat_nice.html','Bernard')
-        return render_template('chat_nice.html')
+        return init_conv('chat_nice.html','Bernard')
+        #return render_template('chat_nice.html')
        
     if request.method == 'POST':
         	return "not implemented"
