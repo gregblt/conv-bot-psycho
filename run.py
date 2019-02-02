@@ -36,8 +36,8 @@ def handle_my_custom_event(json, methods=['GET', 'POST']):
     socketio.emit('to_client', json, callback=messageReceived, room=json['user'])
 
 
-#if __name__ == '__main__':
-
+if __name__ == '__main__':
+    print(int(os.environ.get('PORT')))
   #app.run()
 
   #socketio.run(app, debug=True)
