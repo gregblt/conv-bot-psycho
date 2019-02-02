@@ -4,7 +4,7 @@ import uuid
 
 from flask_socketio import SocketIO
 app.config['SECRET_KEY'] = 'vnkdjnfjknfl1232#'
-socketio = SocketIO(app)
+socketio = SocketIO(app,engineio_logger=True)
 print(int(os.environ.get('PORT')))
 clients = {};
 
@@ -37,7 +37,7 @@ def handle_my_custom_event(json, methods=['GET', 'POST']):
 
 
 if __name__ == '__main__':
-    
+
   #app.run()
 
   #socketio.run(app, debug=True)
