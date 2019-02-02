@@ -39,5 +39,5 @@ def handle_my_custom_event(json, methods=['GET', 'POST']):
 if __name__ == '__main__':
 
   #app.run()
-
+  print(int(os.environ.get('PORT')))
   #socketio.run(app, debug=True)
