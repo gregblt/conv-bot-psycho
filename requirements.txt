@@ -15,6 +15,6 @@ Flask-SQLAlchemy
 psycopg2
 nltk
 Flask-SocketIO
-gevent-socketio
+python-socketio
 
 
