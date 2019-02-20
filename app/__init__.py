@@ -20,7 +20,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['DEBUG'] = True
 
-db = SQLAlchemy(app)
+#db = SQLAlchemy(app)
 
 
 from app.models import Conversations
@@ -58,9 +58,9 @@ def init_conv(template,bot_name):
                           currentJacques=current,
                           currentRobert=current)
         print("user created", u)
-        db.session.add(u)
+        #db.session.add(u)
         
-    db.session.commit()
+    #db.session.commit()
                     
     return resp
 
@@ -138,7 +138,7 @@ def post_message():
         elif(bot_name=='Bernard'):
             conversation.currentBernard=json.dumps(current)
         
-        db.session.commit()
+        #db.session.commit()
         
         # Return response to client
         return resp
